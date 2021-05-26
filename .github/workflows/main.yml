@@ -31,14 +31,14 @@ jobs:
 
       # Runs a set of commands using the runners shell 
       - name: Get upload url
+        id: release-id
         run: |
           RELEASE_ID=$(jq --raw-output '.release.id' $GITHUB_EVENT_PATH)
           echo "::set-output name=upload_url::https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets{?name,label}"
-
       - name: Upload Release Assets
         uses: csexton/release-asset-action@v2
         with:
           pattern: "toDeploy/*"
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          release-url: ${{ steps.outputs.upload_url }}
+          release-url: ${{ steps.release-id.outputs.upload_url }}
           allow-overwrite: true
