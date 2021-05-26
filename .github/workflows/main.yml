@@ -25,9 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      # Runs a set commands using the runners shell
       - name: Run a one-line script
-        run: ./wizard.sh
+        run: |
+          pwd
+          ls -l
 
       # Runs a set of commands using the runners shell 
       - name: Get upload url
@@ -35,6 +37,7 @@ jobs:
         run: |
           RELEASE_ID=$(jq --raw-output '.release.id' $GITHUB_EVENT_PATH)
           echo "::set-output name=upload_url::https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}/assets{?name,label}"
+
       - name: Upload Release Assets
         uses: csexton/release-asset-action@v2
         with:
